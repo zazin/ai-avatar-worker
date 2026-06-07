@@ -15,15 +15,8 @@ git reset --hard "origin/$(git rev-parse --abbrev-ref HEAD)"
 echo "[update] installing dependencies..."
 npm install --omit=dev --no-audit --no-fund
 
-# Restart: kill the previous run (tracked via pidfile) and relaunch detached.
-PIDFILE="$HOME/.tiktok-agent.pid"
-if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
-  echo "[update] stopping previous agent (pid $(cat "$PIDFILE"))..."
-  kill "$(cat "$PIDFILE")" 2>/dev/null || true
-  sleep 2
-fi
-
-echo "[update] starting agent..."
-nohup node agent.js >"$HOME/tiktok-agent.log" 2>&1 &
-echo $! >"$PIDFILE"
-echo "[update] done. running as pid $(cat "$PIDFILE"); logs: ~/tiktok-agent.log"
+# Restart via the shared start/stop scripts (handles pidfile + wake lock).
+echo "[update] restarting agent..."
+bash stop.sh || true
+bash start.sh "$@"
+echo "[update] done."

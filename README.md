@@ -83,6 +83,23 @@ cp ./config.bak.json ai-avatar-worker/agent/config.json
 cd ai-avatar-worker/agent && npm install
 ```
 
+### Running it
+
+```bash
+cd ~/ai-avatar-worker/agent
+bash run.sh            # foreground (see logs live, Ctrl-C to stop)
+
+bash start.sh          # background (detached); logs → ~/tiktok-agent.log
+bash stop.sh           # stop the background agent
+tail -f ~/tiktok-agent.log
+```
+
+`start.sh`/`run.sh` grab a `termux-wake-lock` (so Android won't suspend it with the
+screen off) and ensure the `127.0.0.1:5555` adb loopback is up. All flags
+(`--dry-run`, `--catch-up`, `--once`) pass through, e.g. `bash start.sh --catch-up`.
+On MIUI also exempt Termux from battery optimization and lock it in Recents, or the
+OS will eventually kill it.
+
 After that, to update at any time:
 
 ```bash
