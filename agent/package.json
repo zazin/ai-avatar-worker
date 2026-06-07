@@ -2,12 +2,14 @@
   "name": "termux-tiktok-agent",
   "version": "1.0.0",
   "private": true,
-  "description": "On-device (Termux) agent: drains a HiveMQ work topic and auto-posts each image to TikTok via on-device adb",
+  "description": "Drains a HiveMQ work topic and auto-posts each image to TikTok by driving the phone UI over adb",
   "main": "agent.js",
   "scripts": {
     "start": "node agent.js",
-    "watch": "node agent.js --watch",
-    "catch-up": "node agent.js --catch-up"
+    "dry-run": "node agent.js --dry-run",
+    "catch-up": "node agent.js --catch-up",
+    "once": "node agent.js --once",
+    "no-auto-post": "node agent.js --no-auto-post"
   },
   "dependencies": {
     "mqtt": "^5.10.1"

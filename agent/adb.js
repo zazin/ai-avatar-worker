@@ -1,9 +1,9 @@
 'use strict';
 // Single chokepoint for every adb call (push, shell, intents, UI dumps, taps).
-// On-device in Termux the target is the loopback Wireless-Debugging endpoint
-// (e.g. 127.0.0.1:5555); the adb client runs as the Termux uid while the adb
-// daemon it talks to runs as the privileged `shell` uid — which is what lets us
-// inject taps and run uiautomator that a plain app process cannot.
+// The agent runs on a computer and drives the phone over USB; the target device
+// is auto-detected (see autoDetectTarget) or pinned via ADB_TARGET. adb talks to
+// the phone's daemon as the `shell` uid, which is what lets us inject taps and
+// run uiautomator.
 
 const { execFile } = require('child_process');
 const { promisify } = require('util');

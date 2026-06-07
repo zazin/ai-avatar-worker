@@ -15,7 +15,7 @@ const DEFAULTS = {
     statusTopic: 'tiktok/status',
     // Stable client id => persistent session (broker queues work while we're
     // offline and redelivers on reconnect). Deliberately NOT 'tiktok-agent' so
-    // this on-device agent doesn't fight the Python reference agent's session.
+    // this agent doesn't fight the Python reference agent's session.
     clientId: 'termux-tiktok-agent',
   },
   // adb target. 'auto' = auto-detect the single connected device via

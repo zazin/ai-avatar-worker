@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 'use strict';
-// termux-tiktok-agent — runs ON the phone inside Termux.
+// tiktok-agent — runs on a computer and drives the phone over USB (adb).
 //
 // Drains a HiveMQ work topic (persistent QoS-1 session) and for each message:
 //   1. downloads the image from its ImageURL,
-//   2. adb-pushes it into the gallery (via on-device loopback adb),
+//   2. adb-pushes it into the phone's gallery,
 //   3. auto-posts it to TikTok by driving the UI over adb,
 //   4. publishes the outcome to the status topic and acks the message.
 //
-// Usage:
+// The adb device is auto-detected (override with ADB_TARGET). Usage:
 //   node agent.js                # watch forever, auto-post each new message
 //   node agent.js --no-auto-post # push to gallery only, leave messages pending
 //   node agent.js --once         # drain current backlog once, then exit
