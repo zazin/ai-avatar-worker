@@ -44,4 +44,46 @@ async function connect(target) {
   }
 }
 
-module.exports = { runAdb, connect, setTarget, AdbError };
+// Parse `adb devices` into [{serial, state}].
+async function listDevices() {
+  let stdout;
+  try {
+    ({ stdout } = await execFileAsync('adb', ['devices'], { timeout: 15000 }));
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      throw new AdbError('adb not found on PATH.');
+    }
+    throw new AdbError(`adb devices failed: ${(e.stderr || e.message || '').toString().trim()}`);
+  }
+  return stdout
+    .split('\n')
+    .slice(1) // drop the "List of devices attached" header
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const [serial, state] = l.split(/\s+/);
+      return { serial, state };
+    })
+    .filter((d) => d.serial);
+}
+
+// Pick the single ready ("device") target automatically. Errors helpfully when
+// there are zero or many, so the user knows to plug in or set ADB_TARGET.
+async function autoDetectTarget() {
+  const ready = (await listDevices()).filter((d) => d.state === 'device');
+  if (ready.length === 0) {
+    throw new AdbError(
+      'No adb device connected. Plug in the phone (USB debugging enabled), ' +
+      'confirm with `adb devices`, or set ADB_TARGET.'
+    );
+  }
+  if (ready.length > 1) {
+    throw new AdbError(
+      `Multiple adb devices (${ready.map((d) => d.serial).join(', ')}). ` +
+      'Set ADB_TARGET=<serial> to choose one.'
+    );
+  }
+  return ready[0].serial;
+}
+
+module.exports = { runAdb, connect, setTarget, listDevices, autoDetectTarget, AdbError };

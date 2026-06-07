@@ -18,9 +18,10 @@ const DEFAULTS = {
     // this on-device agent doesn't fight the Python reference agent's session.
     clientId: 'termux-tiktok-agent',
   },
-  // adb target. On-device (Termux) this is the loopback Wireless-Debugging
-  // endpoint. On a computer driving the phone over USB, set this to the serial.
-  adbTarget: '127.0.0.1:5555',
+  // adb target. 'auto' = auto-detect the single connected device via
+  // `adb devices` (the usual case: phone on USB). Override with ADB_TARGET (or
+  // config.json) to pin a serial, or a host:port loopback for Wireless Debugging.
+  adbTarget: 'auto',
   destDir: '/sdcard/Pictures',
   autoPost: true,
 };

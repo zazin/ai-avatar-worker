@@ -28,14 +28,20 @@ const { runConsumer } = require('./source');
 const log = (...a) => console.log(new Date().toISOString(), ...a);
 
 async function ensureAdb(cfg) {
-  adb.setTarget(cfg.adbTarget);
-  if (cfg.adbTarget.includes(':')) {
-    const out = await adb.connect(cfg.adbTarget);
+  let target = cfg.adbTarget;
+  if (!target || target === 'auto') {
+    target = await adb.autoDetectTarget();
+    log('[adb] auto-detected device:', target);
+  } else if (target.includes(':')) {
+    // host:port loopback (Wireless Debugging) — needs an explicit connect.
+    const out = await adb.connect(target);
     log('[adb] connect:', out.trim().replace(/\n/g, ' '));
   }
+  cfg.adbTarget = target;
+  adb.setTarget(target);
   const id = await adb.runAdb(['shell', 'id']);
   if (!/uid=/.test(id)) {
-    throw new Error(`adb shell not working against ${cfg.adbTarget}: ${id.trim()}`);
+    throw new Error(`adb shell not working against ${target}: ${id.trim()}`);
   }
   log('[adb] shell OK:', id.trim());
 }

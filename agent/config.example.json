@@ -8,7 +8,7 @@
     "statusTopic": "tiktok/status",
     "clientId": "termux-tiktok-agent"
   },
-  "adbTarget": "127.0.0.1:5555",
+  "adbTarget": "auto",
   "destDir": "/sdcard/Pictures",
   "autoPost": true
 }
