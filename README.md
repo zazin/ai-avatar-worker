@@ -66,6 +66,34 @@ To develop/test from a computer over USB instead, set `ADB_TARGET=<serial>`:
 ADB_TARGET=827b946 node agent.js --dry-run
 ```
 
+## Updating the app
+
+The agent on the phone should be a **git clone** — then every update is one
+command and your local `config.json` (gitignored) is never disturbed.
+
+One-time migration (if the phone currently has a *copied* folder, not a clone):
+
+```bash
+cd ~
+cp tiktok-agent/config.json /sdcard/config.bak.json 2>/dev/null || cp tiktok-agent/config.json ./config.bak.json
+git clone https://github.com/zazin/ai-avatar-worker.git
+mv tiktok-agent tiktok-agent.old            # keep the old copy just in case
+ln -s ai-avatar-worker/agent tiktok-agent   # or just `cd ai-avatar-worker/agent`
+cp ./config.bak.json ai-avatar-worker/agent/config.json
+cd ai-avatar-worker/agent && npm install
+```
+
+After that, to update at any time:
+
+```bash
+cd ~/ai-avatar-worker/agent
+bash update.sh        # git pull + npm install + restart (logs → ~/tiktok-agent.log)
+```
+
+`update.sh` stops the previous run (tracked via `~/.tiktok-agent.pid`) and relaunches
+detached, so you can fire-and-forget. Develop on the Mac, `git push`, then `bash
+update.sh` on the phone — that's the whole loop.
+
 ## Status
 
 Verified end-to-end (via `--dry-run`) on both Mac-over-USB and on-device Termux:
