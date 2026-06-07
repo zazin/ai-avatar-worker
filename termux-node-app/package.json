@@ -1,0 +1,13 @@
+{
+  "name": "termux-hivemq-consumer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MQTT consumer for HiveMQ Cloud, runs in Termux on Android",
+  "main": "mqtt-consumer.js",
+  "scripts": {
+    "start": "node mqtt-consumer.js"
+  },
+  "dependencies": {
+    "mqtt": "^5.15.1"
+  }
+}

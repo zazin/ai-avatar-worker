@@ -1,0 +1,14 @@
+{
+  "hivemq": {
+    "host": "xxxx.s1.eu.hivemq.cloud",
+    "port": 8883,
+    "username": "your-username",
+    "password": "your-password",
+    "workTopic": "tiktok/posts",
+    "statusTopic": "tiktok/status",
+    "clientId": "termux-tiktok-agent"
+  },
+  "adbTarget": "127.0.0.1:5555",
+  "destDir": "/sdcard/Pictures",
+  "autoPost": true
+}
